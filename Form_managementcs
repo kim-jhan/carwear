@@ -1,0 +1,109 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
+
+namespace 최종_프로그램_세차장_
+{
+    public partial class Form_managementcs : Form
+    {
+
+        public Form_managementcs()
+        {
+            InitializeComponent();
+        }
+
+        //static String connStr = "Server=localhost;Uid=root;Pwd=p@ssw0rd;Database=m_schema.managementcs_tb;Charset=UTF8";
+        MySqlConnection mydb = new MySqlConnection("datasource=localhost;port=3306;username=root;password=p@ssw0rd;");
+
+        //static MySqlConnection conn; // 교량
+        static MySqlCommand cmd; // 트럭
+        static String sql = ""; // 물건박스
+        MySqlDataReader reader; // 트럭이 가져올 끈
+
+        private void button5_Click(object sender, EventArgs e)   // 등록
+        {
+            String Name, Local, Carnumber, Phone, RFID_Key;
+            Name = textBox1_Name.Text;
+            Local = textBox1_local.Text;
+            Carnumber = textBox2_carnumber.Text;
+            Phone = textBox3_Phone.Text;
+            RFID_Key = textBox4_RFID.Text;
+
+            sql = "INSERT INTO m_schema.managementcs_tb(Name, Local, Carnumber, Phone, RFID_Key ) VALUES ('";
+            sql += Name + "', '" + Local + "', '"  + Carnumber + "', '" + Phone + "', '" + RFID_Key + "')";
+            MessageBox.Show(sql);  
+            cmd.CommandText = sql; // 짐을 트럭에 싣기
+            try
+            {
+                cmd.ExecuteNonQuery();
+                textBox1_Name.Text = "";
+                textBox1_local.Text = "";
+                textBox2_carnumber.Text = ""; 
+                textBox3_Phone.Text = "";
+                textBox4_RFID.Text = "";
+                MessageBox.Show("등록 완료");
+                this.DialogResult = DialogResult.OK;
+            }
+            catch 
+            {
+                MessageBox.Show("데이터 값을 확인해 보세요.");
+            }
+        }
+
+        private void Form_managementcs_Load(object sender, EventArgs e)
+        {
+            //<1> 데이터베이스 연결 (교량 건설) + <2> 트럭 준비
+
+            mydb = new MySqlConnection("datasource=localhost;port=3306;username=root;password=p@ssw0rd;");
+            mydb.Open();
+            cmd = new MySqlCommand("", mydb);
+            //sql = "SELECT Name, Carnumber, Phone, RFID_Key FROM m_schema.managementcs_tb"; // 짐 싸기
+            //cmd.CommandText = sql;  // 짐을 트럭에 싣기
+            //MySql.Data.MySqlClient.MySqlException: 'Unable to connect to any of the specified MySQL hosts.'
+            sql = "SELECT * FROM m_schema.managementcs_tb"; // 짐 싸기
+            cmd.CommandText = sql;  // 짐을 트럭에 싣기
+            reader = cmd.ExecuteReader(); // 짐을 서버에 부어넣고, 끈으로 묶어서 끈만 가져옴.
+            String Name, Local, Carnumber, Phone, RFID_Key;  // 톡!하고 땡겨올 짐을 담을 변수.
+            // 끈을 톡!하고 당기기
+            //listView1.View = View.Details;  // 엑셀 시트 비슷한 모양으로 만들기
+            // 칸별로 제목 넣기
+
+            ListViewItem item;  // 한 행의 값
+            while (reader.Read())
+            {
+                Name = (String)reader["Name"];
+                Local = (String)reader["Local"];
+                Carnumber = (String)reader["Carnumber"];
+                Phone = (String)reader["Phone"];
+                RFID_Key = (String)reader["RFID_Key"];
+
+                item = new ListViewItem(RFID_Key.ToString());
+                item.SubItems.Add(Name);
+                item.SubItems.Add(Local);
+                item.SubItems.Add(Carnumber.ToString());
+                item.SubItems.Add(Phone.ToString());
+                listView1.Items.Add(item);
+            }
+            // listView의 폭 조절하기 (열 사이즈에 맞춤)
+            for (int i = 0; i < listView1.Columns.Count; i++)
+            {
+                listView1.Columns[i].TextAlign = HorizontalAlignment.Center;
+                listView1.Columns[i].Width = -2;
+            }
+
+            // 끈 자르기
+            reader.Close();
+        }
+
+        private void button6_delete_Click(object sender, EventArgs e)
+        {
+        
+        }
