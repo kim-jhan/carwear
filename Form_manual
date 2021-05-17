@@ -1,0 +1,101 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Threading;
+using System.IO.Ports;          // for UART communication
+using System.Data.SqlClient;    // for MySQL communication
+using MySql.Data.MySqlClient;   // for MySQL communication
+
+namespace 최종_프로그램_세차장_
+{
+    public partial class Form_manual : Form
+    {
+        public Form_manual()
+        {
+            InitializeComponent();
+        }
+
+        String inData;
+        Thread th1;
+        MySqlConnection mydb = new MySqlConnection("datasource=localhost;port=3306;username=root;password=p@ssw0rd;");
+
+        static MySqlCommand cmd; // 트럭
+        static String sql = ""; // 물건박스
+        MySqlDataReader reader; // 트럭이 가져올 끈
+
+        private void Form_manual_Load(object sender, EventArgs e)
+        {
+            serialPort1.Open();
+            
+            th1 = new Thread(new ThreadStart(MySql));
+            th1.Start();
+        }
+        public void MySql()
+        {
+            while (true)
+            {
+                Thread.Sleep(1000);
+
+                //cmd.CommandText = "INSERT INTO room1_tb VALUES (now(), " + room1_curTemper + ", " + room1_dsrTemper + ", " + room1_state + ");";
+                //cmd.ExecuteNonQuery();
+
+                //cmd.CommandText = "INSERT INTO room2_tb VALUES (now(), " + room2_curTemper + ", " + room2_dsrTemper + ", " + room2_state + ");";
+                //cmd.ExecuteNonQuery();
+
+                //cmd.CommandText = "INSERT INTO room3_tb VALUES (now(), " + room3_curTemper + ", " + room3_dsrTemper + ", " + room3_state + ");";
+                //cmd.ExecuteNonQuery();
+
+                cmd.CommandText = "INSERT INTO room1_tb VALUES (now(), " + room1_dsrTemper + ",);";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = "INSERT INTO room2_tb VALUES (now(), " + room2_dsrTemper + ",);";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = "INSERT INTO room3_tb VALUES (now(), " + room3_dsrTemper + ",);";
+                cmd.ExecuteNonQuery();
+
+                chart1.Series[0].Points.Add(room1_dsrTemper);
+                chart1.Series[1].Points.Add(room2_dsrTemper);
+                chart1.Series[2].Points.Add(room3_dsrTemper);
+
+                if (chart1.Series[0].Points.Count > 30)
+                {
+                    chart1.Series[0].Points.RemoveAt(0);
+                    chart1.Series[1].Points.RemoveAt(0);
+                    chart1.Series[2].Points.RemoveAt(0);
+                }
+            }
+        }
+
+        private void ShowData(object sender, EventArgs e)
+        {
+            if ((inData.Contains("dsr") == true) && (room1_dsrTemper == 0 || room2_dsrTemper == 0 || room3_dsrTemper == 0))
+            {
+                String tmpSplit = inData.Split('m')[1];
+                int tmpRoom = int.Parse(tmpSplit.Split(' ')[0]);
+
+                if (tmpRoom == 1)
+                {
+                    textBox1_purple_tmp.Text = room1_dsrTemper.ToString();
+                    hScrollBar1_purple.Value = room1_dsrTemper;
+                }
+                else if (tmpRoom == 2)
+                {
+                    textBox2_black_tmp.Text = room2_dsrTemper.ToString();
+                    hScrollBar2_black.Value = room2_dsrTemper;
+                }
+                else if (tmpRoom == 3)
+                {
+                    textBox3_green_tmp.Text = room3_dsrTemper.ToString();
+                    hScrollBar3_green.Value = room3_dsrTemper;
+                }
+            }
+        }
+    }
+}
