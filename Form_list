@@ -1,0 +1,97 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
+
+namespace 최종_프로그램_세차장_
+{
+    public partial class Form_list : Form
+    {
+        public Form_list()
+        {
+            InitializeComponent();
+        }
+
+        MySqlConnection mydb = new MySqlConnection("datasource=localhost;port=3306;username=root;password=p@ssw0rd;");
+        static MySqlCommand cmd; // 트럭
+        static String sql = ""; // 물건박스
+        MySqlDataReader reader; // 트럭이 가져올 끈
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form_list_Load(object sender, EventArgs e)
+        {
+            mydb = new MySqlConnection("datasource=localhost;port=3306;username=root;password=p@ssw0rd;");
+            mydb.Open();
+            cmd = new MySqlCommand("", mydb);
+            //sql = "SELECT Name, Carnumber, Phone, RFID_Key FROM m_schema.managementcs_tb"; // 짐 싸기
+            //cmd.CommandText = sql;  // 짐을 트럭에 싣기
+            //MySql.Data.MySqlClient.MySqlException: 'Unable to connect to any of the specified MySQL hosts.'
+            sql = "SELECT * FROM m_schema.managementcs_tb"; // 짐 싸기
+            cmd.CommandText = sql;  // 짐을 트럭에 싣기
+            reader = cmd.ExecuteReader(); // 짐을 서버에 부어넣고, 끈으로 묶어서 끈만 가져옴.
+            String RFID_Key, Name, Local, Carnumber, Phone;  // 톡!하고 땡겨올 짐을 담을 변수.
+            // 끈을 톡!하고 당기기
+            //listView1.View = View.Details;  // 엑셀 시트 비슷한 모양으로 만들기
+            // 칸별로 제목 넣기
+
+            ListViewItem item;  // 한 행의 값
+            while (reader.Read())
+            {
+                RFID_Key = (String)reader["RFID_Key"];
+                Name = (String)reader["Name"];
+                Local = (String)reader["Local"];
+                Carnumber = (String)reader["Carnumber"];
+                Phone = (String)reader["Phone"];
+
+                item = new ListViewItem(RFID_Key);
+                item.SubItems.Add(Name);
+                item.SubItems.Add(Local);
+                item.SubItems.Add(Carnumber);
+                item.SubItems.Add(Phone);
+                listView1_list.Items.Add(item);
+            }
+            // listView의 폭 조절하기 (열 사이즈에 맞춤)
+            for (int i = 0; i < listView1_list.Columns.Count; i++)
+            {
+                listView1_list.Columns[i].TextAlign = HorizontalAlignment.Center;
+                listView1_list.Columns[i].Width = -2;
+            }
+
+            // 끈 자르기
+            reader.Close();
+        }
+
+        private void button1_list_Click(object sender, EventArgs e)
+        {
+            mydb = new MySqlConnection("datasource=localhost;port=3306;username=root;password=p@ssw0rd;");
+            mydb.Open();
+            cmd = new MySqlCommand("", mydb);
+
+            listView1_list.Items.Clear();
+
+            while (reader.Read())
+            {
+                String Name = reader["Name"].ToString();
+                String Local = reader["Local"].ToString();
+                String Carnumber = reader["Carnumber"].ToString();
+                String Phone = reader["Phone"].ToString();
+                String RFID_Key = reader["RFID_Key"].ToString();
+
+                ListViewItem lvi = new ListViewItem(new String[] { Name, Local, Carnumber, Phone, RFID_Key });
+                listView1_list.Items.Add(lvi);
+
+            }
+        }
+    }
+}
