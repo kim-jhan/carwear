@@ -1,0 +1,169 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace 최종_프로그램_세차장_
+{
+    public partial class Form_auto : Form
+    {
+        public Form_auto()
+        {
+            InitializeComponent();
+        }
+
+        private void Form_auto_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_this_min_Click(object sender, EventArgs e)
+        {
+            if ()
+            {
+                progressBar1_this_min.Value = 100;
+            }
+            else if ()
+            {
+                progressBar1_this_min.Value = 0;
+            }
+        }
+
+        private void button3_this_middle_Click(object sender, EventArgs e)
+        {
+            if ()
+            {
+                progressBar2_this_middle.Value = 100;
+            }
+            else if ()
+            {
+                progressBar2_this_middle.Value = 0;
+            }
+        }
+
+        private void button2_this_big_Click(object sender, EventArgs e)
+        {
+            if ()
+            {
+                progressBar3_this_big.Value = 100;
+            }
+            else if ()
+            {
+                progressBar3_this_big.Value = 0;
+            }
+        }
+
+        private void button1_this_vip_Click(object sender, EventArgs e)
+        {
+            if ()
+            {
+                progressBar4_this_vip.Value = 100;
+            }
+            else if ()
+            {
+                progressBar4_this_vip.Value = 0;
+            }
+        }
+
+        private void button5_that_min_Click(object sender, EventArgs e)
+        {
+            if ()
+            {
+                progressBar8_that_min.Value = 100;
+            }
+            else if ()
+            {
+                progressBar8_that_min.Value = 0;
+            }
+        }
+
+        private void button6_that_middle_Click(object sender, EventArgs e)
+        {
+            if ()
+            {
+                progressBar7_that_middle.Value = 100;
+            }
+            else if ()
+            {
+                progressBar7_that_middle.Value = 0;
+            }
+        }
+
+        private void button7_that_big_Click(object sender, EventArgs e)
+        {
+            if ()
+            {
+                progressBar6_that_big.Value = 100;
+            }
+            else if ()
+            {
+                progressBar6_that_big.Value = 0;
+            }
+        }
+
+        private void button8_that_vip_Click(object sender, EventArgs e)
+        {
+            if ()
+            {
+                progressBar5_that_vip.Value = 100;
+            }
+            else if ()
+            {
+                progressBar5_that_vip.Value = 0;
+            }
+        }
+
+        private void button9_eight_min_Click(object sender, EventArgs e)
+        {
+            if ()
+            {
+                progressBar12_eight_min.Value = 100;
+            }
+            else if ()
+            {
+                progressBar12_eight_min.Value = 0;
+            }
+        }
+
+        private void button10_eight_middle_Click(object sender, EventArgs e)
+        {
+            if ()
+            {
+                progressBar11_eight_middle.Value = 100;
+            }
+            else if ()
+            {
+                progressBar11_eight_middle.Value = 0;
+            }
+        }
+
+        private void button11_eight_big_Click(object sender, EventArgs e)
+        {
+            if ()
+            {
+                progressBar10_eight_big.Value = 100;
+            }
+            else if ()
+            {
+                progressBar10_eight_big.Value = 0;
+            }
+        }
+
+        private void button12_eight_vip_Click(object sender, EventArgs e)
+        {
+            if ()
+            {
+                progressBar9_eight_vip.Value = 100;
+            }
+            else if ()
+            {
+                progressBar9_eight_vip.Value = 0;
+            }
+        }
+    }
+}
