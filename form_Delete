@@ -1,0 +1,30 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace 최종_프로그램_세차장_
+{
+    public partial class FormDelete : Form
+    {
+        public delegate void FormSendDataHandler(Object obj);
+        public event FormSendDataHandler FormSendEvent;
+
+        public FormDelete()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_delete_Click(object sender, EventArgs e)
+        {
+            int i = 1;
+
+            this.FormSendEvent(i); // 이벤트를 발생시킨다.
+        }
+    }
+}
